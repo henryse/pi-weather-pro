@@ -1,6 +1,7 @@
 import urllib.request
 import datetime
 import argparse
+# --url=192.168.0.58 --method=OutdoorTemperature
 
 
 def get_page(path, sub_path):
@@ -30,12 +31,16 @@ def get_arguments():
     args = parser.parse_args()
     method_argument = args.method
     url_argument = args.url
-    filepath_argument = args.filepath
+    file_path_argument = args.filepath
     if args.filepath is not None:
-        method_argument = filepath_argument + method_argument
+        method_argument = file_path_argument + method_argument
     return method_argument, url_argument
 
 
-method, url = get_arguments()
-answer = str(datetime.datetime.now()) + ": " + str(get_page(url, method), 'utf-8')
-file_operate(method, answer)
+def execute(target_method, target_url):
+    target_answer = str(datetime.datetime.now()) + ": " + str(get_page(target_url, target_method), 'utf-8')
+    file_operate(target_method, target_answer)
+
+if '__main__' == __name__:
+    method, url = get_arguments()
+    execute(method, url)
