@@ -1,6 +1,7 @@
 import invoke_ourweather
 import time
 import argparse
+import time_check
 
 
 def get_end_time():
@@ -26,4 +27,6 @@ file_elements = ['Altitude', 'OutdoorTemperature', 'OutdoorHumidity', 'CurrentWi
 for file_element in file_elements:
     end_time = get_end_time()
     while time.time() < end_time:
-        invoke_ourweather.execute(file_element,url)
+        start_check_time = time_check.timer_start()
+        invoke_ourweather.execute(file_element, url)
+        time_check.timer_check(start_check_time, file_element)

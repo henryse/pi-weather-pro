@@ -1,6 +1,7 @@
 import urllib.request
 import datetime
 import argparse
+import time
 # --url=192.168.0.58 --method=OutdoorTemperature
 
 
@@ -37,9 +38,15 @@ def get_arguments():
     return method_argument, url_argument
 
 
+def check_time(method):
+    start_time = time.time()
+
+
 def execute(target_method, target_url):
-    target_answer = str(datetime.datetime.now()) + ": " + str(get_page(target_url, target_method), 'utf-8')
+    current_time = datetime.datetime.now()
+    target_answer = str(current_time) + ": " + str(get_page(target_url, target_method), 'utf-8')
     file_operate(target_method, target_answer)
+
 
 if '__main__' == __name__:
     method, url = get_arguments()
