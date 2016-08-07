@@ -1,7 +1,11 @@
 import urllib.request
 import datetime
 import argparse
-import time
+import json
+import sqlite3
+import os.path
+
+
 # --url=192.168.0.58 --method=OutdoorTemperature
 
 
@@ -16,6 +20,17 @@ def file_operate(page, content):
     file_name = page + '.txt'
     with open(file_name, "a") as myfile:
         return myfile.write(content)
+
+
+def parse_jsondict(url_arg):
+    print("hello")
+    full_url = 'http://' + url_arg
+    with urllib.request.urlopen(full_url) as response:
+        full_response = response.read()
+        json_string = str(full_response, 'utf-8')
+        json_dict = json.loads(json_string)
+        return json_dict['variables']
+    return None
 
 
 def get_arguments():
@@ -38,16 +53,37 @@ def get_arguments():
     return method_argument, url_argument
 
 
-def check_time(method):
-    start_time = time.time()
-
-
 def execute(target_method, target_url):
     current_time = datetime.datetime.now()
     target_answer = str(current_time) + ": " + str(get_page(target_url, target_method), 'utf-8')
     file_operate(target_method, target_answer)
 
 
+def create_connect_table():
+    conn = sqlite3.connect('weather.db')
+    c = conn.cursor()
+    sql_create ="CREATE TABLE IF NOT EXISTS weather(ID INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp " \
+                "DATETIME DEFAULT CURRENT_TIMESTAMP,  EnglishOrMetric char(32),  AirQualitySensor char(32), " \
+                "ESP8266HeapSize char(32),  OurWeatherTime char(32),  FullDataString char(32), " \
+                "FirmwareVersion char(32), " \
+                " IndoorTemperature char(32),  BarometricPressure char(32),  Altitude char(32),  " \
+                "OutdoorTemperature char(32),  OutdoorHumidity char(32),  CurrentWindSpeed char(32),  " \
+                "CurrentWindGust char(32),  CurrentWindDirection char(32),  " \
+                "RainTotal char(32),  WindSpeedMin char(32),  " \
+                "WindSpeedMax char(32),  WindGustMin char(32),  WindGustMax char(32),  WindDirectionMin char(32),  " \
+                "WindDirectionMax char(32));"
+    c.execute(sql_create)
+    return c
+
+def insert_into_table(cursor, values):
+    insert_sql =
+    conn_cursor.execute(insert_sql)
+
+
 if '__main__' == __name__:
     method, url = get_arguments()
-    execute(method, url)
+    # execute(method, url)
+    variable_dict = parse_jsondict(url)
+    conn_cursor = create_connect_table()
+    insert_into_table(conn_cursor, variable_dict)
+    print('hello')

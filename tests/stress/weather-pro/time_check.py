@@ -1,5 +1,8 @@
 import time
+import urllib
+
 import invoke_ourweather
+import json
 
 
 def timer_start():
@@ -15,11 +18,12 @@ def timer_check(time_passed, method_type):
         invoke_ourweather.file_operate("ErrorFile", response)
 
 
-method = "Hello"
-a = timer_start()
-time.sleep(30)
-timer_check(a, method)
-a = timer_start()
-time.sleep(61)
-timer_check(a, method)
-print("over lol")
+if '__main__' == __name__:
+    method = "Hello"
+    a = timer_start()
+    time.sleep(30)
+    timer_check(a, method)
+    a = timer_start()
+    time.sleep(61)
+    timer_check(a, method)
+    print("over lol")
