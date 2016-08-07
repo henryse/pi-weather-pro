@@ -72,20 +72,19 @@ options.sleep = 900
 options.daemon = false
 
 opt_parser = OptionParser.new do |opts|
-  opts.banner = 'Usage: build_version.rb [options]'
+  opts.banner = 'Usage: data_collector.rb [options]'
 
   opts.on('--url=URL', String, 'URL Weather Pro endpoint.') do |url|
     options.url = url
   end
 
   opts.on('--sleep=SLEEP', String, 'Seconds to sleep') do |sleep|
-    options.sleep = sleep
+    options.sleep = sleep.to_i
   end
 
-  opts.on('--daemon=DAEMON', String, 'Run as daemon?') do |daemon|
-    options.daemon = daemon.to_s.downcase == 'true'
+  opts.on('-d', '--[no-]daemon', 'Run as daemon?') do |daemon|
+    options.daemon = daemon
   end
-
 end
 
 opt_parser.parse!
