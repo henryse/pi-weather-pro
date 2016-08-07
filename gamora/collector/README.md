@@ -1,0 +1,1 @@
+Collects weather data from device.
