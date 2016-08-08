@@ -1,23 +1,27 @@
 require 'rest-client'
 require 'json'
 require 'sqlite3'
-require 'daemons'
+require 'logger'
 
-class DataCollector
-  def initialize(url)
+class WeatherCollector
+  def initialize(url, directory)
+
+    @logger = Logger.new(STDOUT)
+    @logger.level = Logger::WARN
+
     @url = url
     @ignore = %w(ESP8266HeapSize FullDataString IndoorTemperature)
-    @db_name = 'weather'
+    @db_name = directory + '/weather'
     create_database
   end
 
   def sql_execute(statement)
+    @logger.info  "SQL Statement: #{statement}"
     begin
       db = SQLite3::Database.open @db_name
       db.execute(statement)
     rescue SQLite3::Exception => e
-      puts 'Exception occurred'
-      puts e
+      @logger.error  "SQL Exception: #{e} for statement #{statement}"
     ensure
       db.close if db
     end
@@ -44,24 +48,42 @@ class DataCollector
   end
 
   def get_weather_data
-    JSON.parse(clean_data(RestClient.get @url))
+    json_response = nil
+
+    begin
+      data = clean_data(RestClient.get @url)
+    rescue
+      @logger.error "Exception thrown from trying to connect to #{@url}"
+    end
+
+    unless data.nil?
+      begin
+        json_response = JSON.parse(data)
+      rescue
+        @logger.error "Exception thrown trying to parse data: #{data}"
+      end
+    end
+
+    json_response
   end
 
   def execute
     weather_data = get_weather_data
 
-    # Insert SQL Statement
-    #
-    columns = Array.new
-    values = Array.new
-    weather_data['variables'].each do |value|
-      unless @ignore.include?(value[0])
-        columns.push(value[0])
-        values.push("\"#{value[1].to_s}\"")
+    unless weather_data.nil?
+      # Insert SQL Statement
+      #
+      columns = Array.new
+      values = Array.new
+      weather_data['variables'].each do |value|
+        unless @ignore.include?(value[0])
+          columns.push(value[0])
+          values.push("\"#{value[1].to_s}\"")
+        end
       end
+      insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
+      sql_execute(insert_sql)
     end
-    insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
-    sql_execute(insert_sql)
   end
 end
 
@@ -69,7 +91,7 @@ end
 #
 options = OpenStruct.new
 options.sleep = 900
-options.daemon = false
+options.directory = File.expand_path(File.dirname(__FILE__))
 
 opt_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: data_collector.rb [options]'
@@ -82,8 +104,8 @@ opt_parser = OptionParser.new do |opts|
     options.sleep = sleep.to_i
   end
 
-  opts.on('-d', '--[no-]daemon', 'Run as daemon?') do |daemon|
-    options.daemon = daemon
+  opts.on('--directory=SLEEP', String, 'Directory to write file to') do |directory|
+    options.directory = directory
   end
 end
 
@@ -98,11 +120,7 @@ if options.url.nil?
   puts opt_parser.to_s
 else
 
-  if options.daemon
-    Daemons.daemonize
-  end
-
-  weather_pro = DataCollector.new(options.url)
+  weather_pro = WeatherCollector.new(options.url, options.directory)
 
   while true
     weather_pro.execute
