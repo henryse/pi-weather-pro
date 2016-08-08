@@ -87,7 +87,6 @@ end
 #
 options = OpenStruct.new
 options.sleep = 900
-options.daemon = false
 options.directory = File.expand_path(File.dirname(__FILE__))
 
 opt_parser = OptionParser.new do |opts|
