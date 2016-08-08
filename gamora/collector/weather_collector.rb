@@ -56,10 +56,12 @@ class WeatherCollector
       @logger.error "Exception thrown from trying to connect to #{@url}"
     end
 
-    begin
-      json_response = JSON.parse(data)
-    rescue
-      @logger.error "Exception thrown trying to parse data: #{data}"
+    unless data.nil?
+      begin
+        json_response = JSON.parse(data)
+      rescue
+        @logger.error "Exception thrown trying to parse data: #{data}"
+      end
     end
 
     json_response
@@ -68,18 +70,20 @@ class WeatherCollector
   def execute
     weather_data = get_weather_data
 
-    # Insert SQL Statement
-    #
-    columns = Array.new
-    values = Array.new
-    weather_data['variables'].each do |value|
-      unless @ignore.include?(value[0])
-        columns.push(value[0])
-        values.push("\"#{value[1].to_s}\"")
+    unless weather_data.nil?
+      # Insert SQL Statement
+      #
+      columns = Array.new
+      values = Array.new
+      weather_data['variables'].each do |value|
+        unless @ignore.include?(value[0])
+          columns.push(value[0])
+          values.push("\"#{value[1].to_s}\"")
+        end
       end
+      insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
+      sql_execute(insert_sql)
     end
-    insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
-    sql_execute(insert_sql)
   end
 end
 
