@@ -76,7 +76,6 @@ def create_connect_table():
     return c
 
 def insert_into_table(cursor, values):
-    insert_sql =
     conn_cursor.execute(insert_sql)
 
 
