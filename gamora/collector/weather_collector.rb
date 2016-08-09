@@ -5,7 +5,6 @@ require 'sqlite3'
 require 'logger'
 require 'optionparser'
 
-
 class WeatherCollector
   def initialize(url, directory)
 
