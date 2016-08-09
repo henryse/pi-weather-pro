@@ -3,7 +3,7 @@ require 'rest-client'
 require 'json'
 require 'sqlite3'
 require 'logger'
-require 'optionparser'
+require 'optparse'
 
 class WeatherCollector
   def initialize(url, directory)
