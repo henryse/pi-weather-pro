@@ -81,6 +81,7 @@ class WeatherCollector
           values.push("\"#{value[1].to_s}\"")
         end
       end
+
       insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
       sql_execute(insert_sql)
     end
