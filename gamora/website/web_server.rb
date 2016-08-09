@@ -58,7 +58,7 @@ class WebServer  < Sinatra::Base
     response = Array.new
 
     if element_exist?(element)
-      results = sql_execute("select id, timestamp, #{element} from weather where OutdoorTemperature <> '' ORDER BY id DESC LIMIT #{count};")
+      results = sql_execute("select id, timestamp, #{element} from weather where #{element} <> '' ORDER BY id DESC LIMIT #{count};")
 
       results.each do |row|
         response.push({id: row[0], timestamp: row[1], element => row[2]})
