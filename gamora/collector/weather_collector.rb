@@ -3,6 +3,7 @@ require 'rest-client'
 require 'json'
 require 'sqlite3'
 require 'logger'
+require 'optionparser'
 
 
 class WeatherCollector
