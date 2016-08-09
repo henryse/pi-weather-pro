@@ -1,7 +1,9 @@
+require 'ostruct'
 require 'rest-client'
 require 'json'
 require 'sqlite3'
 require 'logger'
+
 
 class WeatherCollector
   def initialize(url, directory)
@@ -39,7 +41,7 @@ class WeatherCollector
       end
     end
 
-    create_table = "CREATE TABLE if not exists weather(ID INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
+    create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
     sql_execute(create_table)
   end
 
@@ -105,7 +107,7 @@ opt_parser = OptionParser.new do |opts|
     options.sleep = sleep.to_i
   end
 
-  opts.on('--directory=SLEEP', String, 'Directory to write file to') do |directory|
+  opts.on('--directory=DIRECTORY', String, 'Directory to write file to') do |directory|
     options.directory = directory
   end
 end
