@@ -2,7 +2,6 @@ require 'sinatra/base'
 require 'tilt/erb'
 require 'cgi'
 require 'logger'
-require 'yaml'
 require 'sqlite3'
 require 'json'
 
@@ -19,22 +18,11 @@ class WebServer  < Sinatra::Base
     end
   end
 
-  def get_settings
-    begin
-      # noinspection RubyResolve
-      YAML.load(File.open(File.expand_path(File.dirname(__FILE__)) + '/config.yaml'))
-    rescue ArgumentError => e
-      @logger.error "Could not parse YAML: #{e.message}"
-    end
-  end
-
   def initialize
     super(app)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::WARN
-
-    settings = get_settings
-    @db_name = settings['weather_db']
+    @db_name = "#{File.expand_path File.dirname(__FILE__)}/weather"
   end
 
   get '/' do
