@@ -14,25 +14,23 @@ watcher -d -f config.yml
 
 # YAML Configuration File
 
+    sleep: 120
     label1:
         url: http://url/to/hit
-        sleep: 120
         execute: command or bash script to execute if url fails
     label2:
         url: http://url/to/hit
-        sleep: 60
         execute: command or bash script to execute if url fails
 
 Example:
 
+    sleep: 60
     pi-chart:
-        process: pi-chart
-        sleep: 60
+        url: http://pi-chart/something
         execute: /opt/pi-chart/bin/pi-chart -d -p 80
     
     weather_station:
         url: http://weather_station/something
-        sleep: 120
         execute: /opt/restart_weather.sh
 
 Every time there is a successful test log syslog an INFO of the "label" check was successful.
