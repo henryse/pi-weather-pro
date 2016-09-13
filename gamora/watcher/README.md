@@ -15,13 +15,13 @@ watcher -d -f config.yml
 # YAML Configuration File
 
     label1:
-        process: process_name
-        sleep: 60
-        execute: command or bash script to execute
-    label2:
         url: http://url/to/hit
         sleep: 120
-        execute: command or bash script to execute
+        execute: command or bash script to execute if url fails
+    label2:
+        url: http://url/to/hit
+        sleep: 60
+        execute: command or bash script to execute if url fails
 
 Example:
 
@@ -40,15 +40,10 @@ Every time there is a successful test log syslog an INFO of the "label" check wa
 Every time there is a failure test log syslog an ERROR of the "label" check that failed and the returned from the "execute" process.
 
 
-    gem install sys-proctable
+    require 'rest-client'
 
-    require 'sys/proctable'
+Gemfile:
 
-    list  = Sys::ProcTable.ps
-    x = Array.new
-
-    list.each do |item|
-        x.push(item.name)
-    end
+    source 'https://rubygems.org'
     
-    
+    gem 'rest-client'
