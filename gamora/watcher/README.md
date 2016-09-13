@@ -39,3 +39,8 @@ Every time there is a successful test log syslog an INFO of the "label" check wa
 
 Every time there is a failure test log syslog an ERROR of the "label" check that failed and the returned from the "execute" process.
 
+
+    gem install sys-proctable
+
+    require 'sys/proctable'
+    Sys::ProcTable.ps
