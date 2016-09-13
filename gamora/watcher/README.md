@@ -43,4 +43,12 @@ Every time there is a failure test log syslog an ERROR of the "label" check that
     gem install sys-proctable
 
     require 'sys/proctable'
-    Sys::ProcTable.ps
+
+    list  = Sys::ProcTable.ps
+    x = Array.new
+
+    list.each do |item|
+        x.push(item.name)
+    end
+    
+    
