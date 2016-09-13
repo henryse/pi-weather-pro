@@ -43,5 +43,4 @@ Every time there is a failure test log syslog an ERROR of the "label" check that
 Gemfile:
 
     source 'https://rubygems.org'
-    
     gem 'rest-client'
