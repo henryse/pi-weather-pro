@@ -20,7 +20,7 @@ fi
 # Description:       Used to control the weather_watcher
 ### END INIT INFO
 
-process_id=$(ps -ax | grep 'watcher' | grep -v 'grep' | awk '{print $1}')
+process_id=$(ps -ax | grep 'ruby watcher' | grep -v 'grep' | awk '{print $1}')
 
 # The following part carries out specific functions depending on arguments.
 case "$1" in

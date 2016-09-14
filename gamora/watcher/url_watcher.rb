@@ -14,7 +14,7 @@ class UrlWatcher
   def test
     success = false
     begin
-      uri = URI('https://www.google.com')
+      uri = URI(@url)
 
       success = Net::HTTP.get_response(uri).code.to_i == 200
 
