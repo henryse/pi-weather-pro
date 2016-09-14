@@ -24,8 +24,8 @@ help: version
 build: version
 	bundle
 
-run: build
+run: version
 	rackup --port=8080
 
-daemon: build
+daemon: version
 	rackup --port=8080 --daemonize

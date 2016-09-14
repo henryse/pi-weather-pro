@@ -24,8 +24,8 @@ help: version
 build: version
 	bundle
 
-run: build
+run: version
 	ruby weather_collector.rb --url="http://weather-pro" --sleep=SLEEP --directory=$(weather_data)
 
-daemon: build
+daemon: version
 	ruby weather_collector.rb --url="http://weather-pro" --sleep=SLEEP --directory=$(weather_data) &
