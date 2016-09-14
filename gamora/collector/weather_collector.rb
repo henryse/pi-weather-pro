@@ -9,7 +9,7 @@ class WeatherCollector
   def initialize(url, directory)
 
     @logger = Logger.new(STDOUT)
-    @logger.level = Logger::WARN
+    @logger.level = Logger::INFO
 
     @url = url
     @ignore = %w(ESP8266HeapSize FullDataString IndoorTemperature)
@@ -29,7 +29,7 @@ class WeatherCollector
     end
   end
 
-  def create_database
+  def internal_create_database
     weather_data = get_weather_data
 
     # Create SQL Statement
@@ -43,6 +43,21 @@ class WeatherCollector
 
     create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
     sql_execute(create_table)
+  end
+
+  def create_database
+    @logger.info("Starting to create database: #{@db_name}")
+
+    while true
+      begin
+        internal_create_database
+        break
+      rescue Exception => e
+        @logger.error("Unable to create dabase, will try again in a bit: #{e}")
+      end
+      sleep(120)
+    end
+    @logger.info("Created database: #{@db_name}")
   end
 
   def clean_data(input)
