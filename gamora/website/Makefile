@@ -25,7 +25,7 @@ build: version
 	bundle
 
 run: version
-	rackup --port=8080
+	/bin/bash -c "rackup --host=0.0.0.0 --port=8080"
 
 daemon: version
-	rackup --port=8080 --daemonize
+	/bin/bash -c "rackup --host=0.0.0.0 --port=8080 --daemonize"
