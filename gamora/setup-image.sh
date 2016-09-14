@@ -20,3 +20,5 @@ make clean
 make
 sudo make install
 
+sudo gem update
+sudo gem install bundle sinatra thin rack sqlite3 rest-client
