@@ -20,7 +20,7 @@ fi
 # Description:       Used to control the web_server
 ### END INIT INFO
 
-process_id=$(ps -e | grep web_server | awk '{print $1}')
+process_id=$(ps -ax | grep 'web_server' | grep -v 'grep' | awk '{print $1}')
 
 # The following part carries out specific functions depending on arguments.
 case "$1" in

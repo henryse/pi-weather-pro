@@ -1,4 +1,4 @@
-current_dir:= $(shell pwd)
+current_dir:=$(shell pwd)
 weather_data:=$(current_dir)/../website
 
 version:
@@ -25,7 +25,7 @@ build: version
 	bundle
 
 run: version
-	ruby weather_collector.rb --url="http://weather-pro" --sleep=SLEEP --directory=$(weather_data)
+	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	ruby weather_collector.rb --url="http://weather-pro" --sleep=SLEEP --directory=$(weather_data) &
+	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data) &

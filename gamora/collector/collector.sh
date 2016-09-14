@@ -20,7 +20,7 @@ fi
 # Description:       Used to control the weather_collector
 ### END INIT INFO
 
-process_id=$(ps -e | grep weather_collector | awk '{print $1}')
+process_id=$(ps -ax | grep 'weather_collector' | grep -v 'grep' | awk '{print $1}')
 
 # The following part carries out specific functions depending on arguments.
 case "$1" in
