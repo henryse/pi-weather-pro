@@ -1,0 +1,4 @@
+weather_station:
+    url: http://weatherpro
+    sleep: 120
+    execute: echo 'hello'

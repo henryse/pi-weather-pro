@@ -1,9 +1,0 @@
-pi-chart:
-    process: pi-chart
-    sleep: 5
-    execute: /opt/pi-chart/bin/pi-chart -d -p 80
-
-weather_station:
-    url: http://weather_station/something
-    sleep: 10
-    execute: /opt/restart_weather.sh
