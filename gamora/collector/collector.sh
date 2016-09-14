@@ -16,8 +16,8 @@ fi
 # Required-Stop:     $remote_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: pi-chart script
-# Description:       Used to control the pi-chart
+# Short-Description: weather_collector script
+# Description:       Used to control the weather_collector
 ### END INIT INFO
 
 process_id=$(ps -e | grep weather_collector | awk '{print $1}')
@@ -28,10 +28,9 @@ case "$1" in
     log_message "Starting weather_collector...";
     if [ -z "${process_id}" ]; then
         log_message "weather_collector script executing";
-        # TODO: We need to fill this in....
-        /bin/bash -c "/// TODO: We need to define this. &";
+        /bin/bash -c "/home/pi/pi-weather-pro/gamora/collector/;make daemon";
     else
-        log_message "pi-chart is already running: ${process_id}";
+        log_message "weather_collector is already running: ${process_id}";
     fi
     ;;
   stop)
@@ -56,4 +55,4 @@ exit 0
 
 DESC="weather_collector"
 # TODO: We need to fill this in....
-DAEMON=/.../weather_collector
+DAEMON=/home/pi/pi-weather-pro/gamora/collector/weather_collector.rb

@@ -5,10 +5,10 @@ require 'ostruct'
 require 'optparse'
 require_relative 'url_watcher'
 
-class Watcher
+class WeatherWatcher
   def initialize(config_file)
     @logger = Logger.new(STDOUT)
-    @logger.level = Logger::WARN
+    @logger.level = Logger::INFO
 
     # Load the config file
     @config = YAML.load_file("#{Dir.pwd}/#{config_file}")
@@ -57,5 +57,6 @@ if options.config.nil?
   puts 'ERROR: You need to pass at lest an YAML config file.'
   puts opt_parser.to_s
 else
-  Watcher.new(options.config).watch
+  puts 'Starting Watcher...'
+  WeatherWatcher.new(options.config).watch
 end
