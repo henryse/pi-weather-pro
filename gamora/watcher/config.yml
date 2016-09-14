@@ -1,4 +1,4 @@
 weather_station:
     url: http://weather-pro
     sleep: 120
-    execute: sh /home/pi/pi-weather-pro/gamora/watcher/rest_station.sh
+    execute: sh /home/pi/pi-weather-pro/gamora/watcher/reset_station.sh
