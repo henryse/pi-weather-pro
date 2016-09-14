@@ -25,7 +25,7 @@ build: version
 	bundle
 
 run: version
-	ruby watcher.rb --config=config.yml
+	ruby weather_watcher.rb --config=config.yml
 
 daemon: version
-	ruby watcher.rb --config=config.yml &
+	ruby weather_watcher.rb --config=config.yml &

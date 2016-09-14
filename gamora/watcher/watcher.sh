@@ -29,9 +29,9 @@ case "$1" in
     if [ -z "${process_id}" ]; then
         log_message "weather_watcher script executing";
         # TODO: We need to fill this in....
-        /bin/bash -c "/home/pi/pi-weather-pro/gamora/watcher/;make daemon";
+        /bin/bash -c "cd /home/pi/pi-weather-pro/gamora/watcher/;make daemon";
     else
-        log_message "pi-chart is already running: ${process_id}";
+        log_message "watcher is already running: ${process_id}";
     fi
     ;;
   stop)
@@ -55,4 +55,4 @@ exit 0
 # Author: Henry Seurer <henry@gmail.com>
 
 DESC="weather_watcher"
-DAEMON=cd /home/pi/pi-weather-pro/gamora/watcher/weather_watcher.rb
+DAEMON=/home/pi/pi-weather-pro/gamora/watcher/weather_watcher.rb
