@@ -1,5 +1,7 @@
 require 'sqlite3'
 require 'set'
+require 'ostruct'
+require 'optionparser'
 
 class ConvertWeather
 
@@ -27,9 +29,13 @@ class ConvertWeather
         # The first row is the column names.
         column_names = row
         puts "Found columns: #{column_names}"
+
       else
         # OK now the data.
         new_row = Array.new
+        puts row[0].class
+        puts row[1].class
+        puts row[2].class
         row.each do |column|
           # We need to create a new "row" that has the correct types
           # with the following algorithms:
@@ -38,7 +44,6 @@ class ConvertWeather
           #    the string to a date time
           # 3. All other columns will be converted to a "float" or "Decimal" whatever
           #    is accurate
-
 
         end
       end
