@@ -1,5 +1,8 @@
 require 'sqlite3'
 require 'set'
+require 'ostruct'
+require 'optionparser'
+require 'date'
 
 class ConvertWeather
 
@@ -12,6 +15,10 @@ class ConvertWeather
     #
     @datetime = Set.new
     @datetime.add('OurWeatherTime')
+  end
+
+  def is_column_datetime(column_name)
+    @datetime.member?(column_name)
   end
 
   def execute
@@ -30,16 +37,31 @@ class ConvertWeather
       else
         # OK now the data.
         new_row = Array.new
-        row.each do |column|
-          # We need to create a new "row" that has the correct types
-          # with the following algorithms:
-          # 1. We need to preserve any column that is of type "timestamp"
-          # 2. Lookup the Column name, if it is in the @datetime set then convert
-          #    the string to a date time
-          # 3. All other columns will be converted to a "float" or "Decimal" whatever
-          #    is accurate
 
+        (0..row.size).each do |column|
 
+          # We need to preserve any column that is of types that are not "Strings"
+          #
+          if row[column].is_a?(Integer)
+            puts new_row[column] = row[column]
+          end
+          if row[column].is_a?(String)
+            # Lookup the Column name, if it is in the @datetime set then convert
+            # the string to a date time
+            #
+            if is_column_datetime(column_names[column])
+              # Convert to date time
+              #puts "Convert to  date time #{column}:#{row[column]}"
+              puts new_row[column] = DateTime.strptime(row[column], '%m/%d/%Y %H:%M:%S')
+            else
+              # All other columns will be converted to a "float" or "Decimal" whatever is accurate
+              #puts "Convert #{column}:#{row[column]}"
+              puts new_row[column] = row[column].to_f
+            end
+          else
+            puts "Do nothing: #{column}:#{row[column]}"
+            puts 'hello test'
+          end
         end
       end
     end

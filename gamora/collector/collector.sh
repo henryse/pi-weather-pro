@@ -51,7 +51,7 @@ esac
 
 exit 0
 
-# Author: Henry Seurer <henry@gmail.com>
+# Author: Henry Seurer <henryse@gmail.com>
 
 DESC="weather_collector"
 # TODO: We need to fill this in....

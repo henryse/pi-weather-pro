@@ -28,6 +28,9 @@ class WebServer  < Sinatra::Base
   get '/' do
     erb :index
   end
+  get '/test' do
+    erb :test
+  end
 
   def element_exist?(element)
 
