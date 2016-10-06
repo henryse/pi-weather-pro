@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 sudo apt-get -y update
+sudo apt-get -y upgrade
 sudo apt-get install -y build-essential
 sudo apt-get install -y libpq-dev libffi-dev zlib1g-dev libyaml-dev libssl-dev
 sudo apt-get install -y libgdbm-dev libreadline6-dev libncurses5-dev
