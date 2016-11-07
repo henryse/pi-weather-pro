@@ -28,7 +28,7 @@ case "$1" in
     log_message "Starting weather_collector...";
     if [ -z "${process_id}" ]; then
         log_message "weather_collector script executing";
-        /bin/bash -c "cd /home/pi/pi-weather-pro/gamora/collector/;make daemon";
+        /bin/bash -c "cd /home/pi/pi-weather-pro/groot-jr/collector/;make daemon";
     else
         log_message "weather_collector is already running: ${process_id}";
     fi
