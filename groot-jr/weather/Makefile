@@ -27,4 +27,4 @@ run: version
 	sudo python weather_server.py
 
 daemon: version
-	python sudo python weather_server.py &
+	sudo python weather_server.py &
