@@ -28,6 +28,12 @@ help: version
 build: version
 	bundle
 
+install: build
+	sudo update-rc.d -f collector remove
+	sudo cp collector.sh /etc/init.d/collector
+	sudo chmod 755 /etc/init.d/collector
+	sudo update-rc.d collector defaults
+
 run: version
 	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data)
 

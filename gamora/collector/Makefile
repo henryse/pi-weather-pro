@@ -24,6 +24,12 @@ help: version
 build: version
 	bundle
 
+install: build
+	sudo update-rc.d -f watcher remove
+	sudo cp watcher.sh /etc/init.d/watcher
+	sudo chmod 755 /etc/init.d/watcher
+	sudo update-rc.d watcher defaults
+
 run: version
 	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data)
 
