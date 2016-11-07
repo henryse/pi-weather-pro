@@ -29,7 +29,7 @@ build: version
 	bundle
 
 run: version
-	ruby weather_collector.rb --url="http://weather-pro:8080" --sleep=900 --directory=$(weather_data)
+	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	ruby weather_collector.rb --url="http://weather-pro:8080" --sleep=900 --directory=$(weather_data) &
+	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data) &
