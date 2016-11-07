@@ -52,4 +52,4 @@ esac
 exit 0
 
 DESC="weather_server"
-DAEMON="python /home/pi/pi-weather-pro/groot-jr/weather/weather_server.py"
+DAEMON="/home/pi/pi-weather-pro/groot-jr/weather/weather_server.py"
