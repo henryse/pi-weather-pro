@@ -54,4 +54,4 @@ exit 0
 # Author: Henry Seurer <henry@gmail.com>
 
 DESC="web_server"
-DAEMON=cd /home/pi/pi-weather-pro/gamora/website/web_server.rb
+DAEMON=cd /home/pi/pi-weather-pro/groot-jr/website/web_server.rb

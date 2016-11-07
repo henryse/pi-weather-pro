@@ -56,4 +56,4 @@ exit 0
 DESC="weather_server"
 
 # TODO: We need to fill this in....
-DAEMON=/home/pi/pi-weather-pro/gamora/collector/weather_collector.rb
+DAEMON=/home/pi/pi-weather-pro/groot-jr/collector/weather_collector.rb
