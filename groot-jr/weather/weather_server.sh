@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# /etc/init.d/collector
+# /etc/init.d/weather
 
 function log_message {
     echo $1;
@@ -51,9 +51,5 @@ esac
 
 exit 0
 
-# Author: Henry Seurer <henryse@gmail.com>
-
-DESC="weather_server"
-
-# TODO: We need to fill this in....
-DAEMON=/home/pi/pi-weather-pro/groot-jr/collector/weather_collector.rb
+DESC="weather"
+DAEMON="python /home/pi/pi-weather-pro/groot-jr/weather/weather_collector.py"
