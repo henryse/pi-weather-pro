@@ -53,7 +53,7 @@ class WeatherCollector
         internal_create_database
         break
       rescue Exception => e
-        @logger.error("Unable to create dabase, will try again in a bit: #{e}")
+        @logger.error("Unable to create database, will try again in a bit: #{e}")
       end
       sleep(120)
     end
