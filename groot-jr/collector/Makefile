@@ -1,10 +1,14 @@
 current_dir:=$(shell pwd)
 weather_data:=$(current_dir)/../website
+ip_address:=$(shell ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 version:
 	@echo [INFO] [version]
 	@echo [INFO]    Build Makefile Version 1.00
-	@echo
+	@echo [INFO] [settings]
+	@echo [INFO]    weather_data: $(weather_data)
+	@echo [INFO]    ip_address: $(ip_address)
+
 
 help: version
 	@printf "\e[1;34m[INFO] [information]\e[00m\n\n"
