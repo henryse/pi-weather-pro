@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# /etc/init.d/weather
+# /etc/init.d/weather_server
 
 function log_message {
     echo $1;
@@ -52,4 +52,4 @@ esac
 exit 0
 
 DESC="weather"
-DAEMON="python /home/pi/pi-weather-pro/groot-jr/weather/weather_collector.py"
+DAEMON="python /home/pi/pi-weather-pro/groot-jr/weather/weather_server.py"
