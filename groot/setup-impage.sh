@@ -25,3 +25,7 @@ make
 sudo make install
 sudo gem update
 sudo gem install bundle sinatra thin rack sqlite3 rest-client wiringpi
+
+# Fix for Dirty Cow
+sudo apt-get -y update
+sudo apt-get -y install raspberrypi-kernel
