@@ -24,7 +24,7 @@ def get_health():
 @app.route('/')
 def get_weather():
     data = get_weather_data()
-    response = {'EnglishOrMetric': 0,
+    response = {'EnglishOrMetric': '0',
                 'OurWeatherTime': data.get('DS3231', None).get('time', None),
                 'BarometricPressure': data.get('BMP280', None).get('pressure', None),
                 'Altitude': data.get('BMP280', None).get('pressure', None),
@@ -34,7 +34,7 @@ def get_weather():
                 'CurrentWindGust': data.get('weather_rack', None).get('wind_gust', None),
                 'CurrentWindDirection':data.get('ADS1015', None).get('wind_direction', None),
                 'RainTotal': data.get('weather_rack', None).get('rain_total', None),
-                'IndoorTemperature': data.get('DS3231', None).get('temperature', None)}
+                'IndoorTemperature': str(data.get('DS3231', None).get('temperature', None))}
     return json.dumps(response, ensure_ascii=False)
 
 
