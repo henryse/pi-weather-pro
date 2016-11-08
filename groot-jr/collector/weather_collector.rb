@@ -21,11 +21,7 @@ class WeatherCollector
     @logger.info  "SQL Statement: #{statement}"
     begin
       db = SQLite3::Database.open @db_name
-      if db.nil?
-        @logger.error  "Unable to open file #{@db_name} to execute #{statement}"
-      else
-        db.execute(statement)
-      end
+      db.execute(statement)
     rescue SQLite3::Exception => e
       @logger.error  "SQL Exception: #{e} for statement #{statement}"
     ensure
@@ -85,6 +81,7 @@ class WeatherCollector
       end
     end
 
+    puts json_response.to_s
     json_response
   end
 
