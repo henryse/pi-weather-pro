@@ -106,6 +106,7 @@ end
 options = OpenStruct.new
 options.sleep = 900
 options.directory = File.expand_path(File.dirname(__FILE__))
+options.daemon = false
 
 opt_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: data_collector.rb [options]'
@@ -121,6 +122,10 @@ opt_parser = OptionParser.new do |opts|
   opts.on('--directory=DIRECTORY', String, 'Directory to write file to') do |directory|
     options.directory = directory
   end
+
+  opts.on('--daemonize=DAEMONIZE', String, 'Run as a daemon') do |daemon|
+    options.daemon = daemon.downcase == 'true'
+  end
 end
 
 opt_parser.parse!
@@ -133,6 +138,7 @@ if options.url.nil?
   puts 'ERROR: You need to pass at lest an URL of the Weather Pro endpoint'
   puts opt_parser.to_s
 else
+  Process.daemon if options.daemon
 
   weather_pro = WeatherCollector.new(options.url, options.directory)
 
