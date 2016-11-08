@@ -81,7 +81,6 @@ class WeatherCollector
       end
     end
 
-    puts json_response.to_s
     json_response
   end
 
@@ -93,7 +92,7 @@ class WeatherCollector
       #
       columns = Array.new
       values = Array.new
-      weather_data['variables'].each do |value|
+      weather_data.each do |value|
         unless @ignore.include?(value[0])
           columns.push(value[0])
           values.push("\"#{value[1].to_s}\"")
