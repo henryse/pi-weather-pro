@@ -25,7 +25,7 @@ help: version
 build: version
 	bundle
 
-install: build:
+install: build
 	sudo update-rc.d -f website remove
 	sudo cp website.sh /etc/init.d/website
 	sudo chmod 755 /etc/init.d/website
