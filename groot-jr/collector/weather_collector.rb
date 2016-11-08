@@ -14,7 +14,6 @@ class WeatherCollector
     @url = url
     @ignore = %w(ESP8266HeapSize FullDataString)
     @db_name = directory + '/weather'
-    create_database
   end
 
   def sql_execute(statement)
@@ -29,30 +28,47 @@ class WeatherCollector
     end
   end
 
-  def internal_create_database
-    weather_data = get_weather_data
+  def create_database(weather_data)
+    if File.exist?(@db_name)
+      @logger.info("Database '#{@db_name}' already exists, we don't need to create it")
+    else
+      @logger.info("Starting to create database: #{@db_name}")
 
-    # Create SQL Statement
-    #
-    create_values = Array.new
-    weather_data.each do |value|
-      unless @ignore.include?(value[0])
-        create_values.push(" #{value[0]} char(32)")
+      begin
+        create_values = Array.new
+        weather_data.each do |value|
+          unless @ignore.include?(value[0])
+            create_values.push(" #{value[0]} char(32)")
+          end
+        end
+
+        create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
+        sql_execute(create_table)
+        @logger.info("Created database: #{@db_name}")
+      rescue Exception => e
+        @logger.error("Unable to create database, will try again in a bit: #{e}")
+        return false
       end
     end
 
-    create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
-    sql_execute(create_table)
+    true
   end
 
-  def create_database
-    @logger.info("Starting to create database: #{@db_name}")
-
+  def update_database(weather_data)
     begin
-      internal_create_database
-      @logger.info("Created database: #{@db_name}")
+      columns = Array.new
+      values = Array.new
+      weather_data.each do |value|
+        unless @ignore.include?(value[0])
+          columns.push(value[0])
+          values.push("\"#{value[1].to_s}\"")
+        end
+      end
+
+      insert_row = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
+      sql_execute(insert_row)
     rescue Exception => e
-      @logger.error("Unable to create database, will try again in a bit: #{e}")
+      @logger.error("Unable to update database: #{e}")
     end
   end
 
@@ -84,19 +100,9 @@ class WeatherCollector
     weather_data = get_weather_data
 
     unless weather_data.nil?
-      # Insert SQL Statement
-      #
-      columns = Array.new
-      values = Array.new
-      weather_data.each do |value|
-        unless @ignore.include?(value[0])
-          columns.push(value[0])
-          values.push("\"#{value[1].to_s}\"")
-        end
+      if create_database(weather_data)
+        update_database(weather_data)
       end
-
-      insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
-      sql_execute(insert_sql)
     end
   end
 end
