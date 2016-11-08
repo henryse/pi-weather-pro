@@ -196,7 +196,6 @@ def get_weather_data():
             try:
                 am2315 = AM2315(0x5c, "/dev/i2c-1")
                 temperature, humidity, crc_check = am2315.sense()
-                print "AM2315 =", temperature
                 config.AM2315_Present = True
                 if crc_check == -1:
                     config.AM2315_Present = False
