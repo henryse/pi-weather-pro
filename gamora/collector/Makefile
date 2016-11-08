@@ -1,6 +1,5 @@
 current_dir:=$(shell pwd)
 weather_data:=$(current_dir)/../website/public
-ip_address:=$(shell ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 version:
 	@echo [INFO] [version]
@@ -36,7 +35,7 @@ install: build
 	sudo update-rc.d collector defaults
 
 run: version
-	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data)
+	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	/usr/local/bin/ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data) --daemonize=true
+	/usr/local/bin/ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data) --daemonize=true
