@@ -24,6 +24,7 @@ help: version
 
 build: version
 	bundle
+	sudo gem uninstall rack --version 2.0.1
 
 install: build
 	sudo update-rc.d -f website remove
@@ -35,4 +36,4 @@ run: version
 	/bin/bash -c "rackup --host=0.0.0.0 --port=8080"
 
 daemon: version
-	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8080 --daemonize"
+	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8090 --daemonize"
