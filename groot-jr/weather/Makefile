@@ -9,6 +9,7 @@ help: version
 	@printf "\e[1;34m[INFO] [information]\e[00m\n\n"
 	@echo [INFO] This make process supports the following targets:
 	@echo [INFO]    build   - build both the project and Docker image
+	@echo [INFO]    install - install the application
 	@echo [INFO]    run     - run the service locally in development environment
 	@echo [INFO]    daemon  - run the service as a daemon locally in development environment
 	@echo
