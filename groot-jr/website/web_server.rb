@@ -78,9 +78,13 @@ class WebServer  < Sinatra::Base
     element = params['element']
     response = 'Not Found'
 
+    puts "Trying to get value: #{element}"
+
     if element_exist?(element)
+      puts "sql_execute to get value: #{element}"
       results = sql_execute("select #{element} from weather where #{element} <> '' ORDER BY id DESC LIMIT #{1};")
 
+      puts "sql_execute results: #{results.size}"
       results.each do |row|
         response = row[0]
       end
