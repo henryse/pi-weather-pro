@@ -12,7 +12,7 @@ class WeatherCollector
     @logger.level = Logger::INFO
 
     @url = url
-    @ignore = %w(ESP8266HeapSize FullDataString IndoorTemperature)
+    @ignore = %w(ESP8266HeapSize FullDataString)
     @db_name = directory + '/weather'
     create_database
   end
