@@ -35,7 +35,7 @@ class WeatherCollector
     # Create SQL Statement
     #
     create_values = Array.new
-    weather_data['variables'].each do |value|
+    weather_data.each do |value|
       unless @ignore.include?(value[0])
         create_values.push(" #{value[0]} char(32)")
       end
@@ -48,16 +48,12 @@ class WeatherCollector
   def create_database
     @logger.info("Starting to create database: #{@db_name}")
 
-    while true
-      begin
-        internal_create_database
-        break
-      rescue Exception => e
-        @logger.error("Unable to create database, will try again in a bit: #{e}")
-      end
-      sleep(120)
+    begin
+      internal_create_database
+      @logger.info("Created database: #{@db_name}")
+    rescue Exception => e
+      @logger.error("Unable to create database, will try again in a bit: #{e}")
     end
-    @logger.info("Created database: #{@db_name}")
   end
 
   def clean_data(input)
