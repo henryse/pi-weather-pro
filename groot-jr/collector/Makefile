@@ -1,5 +1,5 @@
 current_dir:=$(shell pwd)
-weather_data:=$(current_dir)/../website
+weather_data:=$(current_dir)/../website/public
 ip_address:=$(shell ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 version:

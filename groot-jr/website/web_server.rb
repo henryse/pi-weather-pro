@@ -22,7 +22,7 @@ class WebServer  < Sinatra::Base
     super(app)
     @logger = Logger.new(STDOUT)
     @logger.level = Logger::WARN
-    @db_name = "#{File.expand_path File.dirname(__FILE__)}/weather"
+    @db_name = "#{File.expand_path File.dirname(__FILE__)}/weather/public"
   end
 
   get '/' do
