@@ -43,7 +43,7 @@ class WebServer  < Sinatra::Base
     false
   end
 
-  get '/data/:element/:count' do
+  get '/series/:element/:count' do
     element = params['element']
     count =  params['count'].to_i
     response = Array.new
@@ -55,6 +55,37 @@ class WebServer  < Sinatra::Base
         response.push({id: row[0], timestamp: row[1], element => row[2]})
       end
     end
-    {results: response}.to_json
+    response.to_json
+  end
+
+  get '/values/:element/:count' do
+    element = params['element']
+    count =  params['count'].to_i
+    response = Array.new
+
+    if element_exist?(element)
+      results = sql_execute("select #{element} from weather where #{element} <> '' ORDER BY id DESC LIMIT #{count};")
+
+      results.each do |row|
+        response.push(row[0])
+      end
+    end
+
+    response.to_json
+  end
+
+  get '/value/:element' do
+    element = params['element']
+    response = 'Not Found'
+
+    if element_exist?(element)
+      results = sql_execute("select #{element} from weather where #{element} <> '' ORDER BY id DESC LIMIT #{1};")
+
+      results.each do |row|
+        response = row[0]
+      end
+    end
+
+    response
   end
 end
