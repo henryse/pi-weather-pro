@@ -32,7 +32,7 @@ install: build
 	sudo update-rc.d website defaults
 
 run: version
-	/bin/bash -c "rackup --host=0.0.0.0 --port=8080"
+	/bin/bash -c "rackup --host=0.0.0.0 --port=8090"
 
 daemon: version
 	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8090 --daemonize"
