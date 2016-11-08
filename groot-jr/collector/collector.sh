@@ -40,7 +40,7 @@ case "$1" in
         log_message "weather_collector is not running";
     else
         log_message "Killing ${process_id}";
-        kill ${process_id}
+        sudo kill ${process_id}
     fi
     ;;
   *)
