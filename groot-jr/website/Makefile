@@ -35,4 +35,4 @@ run: version
 	/bin/bash -c "rackup --host=0.0.0.0 --port=8080"
 
 daemon: version
-	/bin/bash -c "rackup --host=0.0.0.0 --port=8080 --daemonize"
+	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8080 --daemonize"
