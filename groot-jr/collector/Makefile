@@ -39,4 +39,4 @@ run: version
 	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data) --daemonize=true
+	/usr/local/bin/ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data) --daemonize=true
