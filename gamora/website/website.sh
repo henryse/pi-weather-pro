@@ -20,7 +20,7 @@ fi
 # Description:       Used to control the web_server
 ### END INIT INFO
 
-process_id=$(ps -ax | grep 'web_server' | grep -v 'grep' | awk '{print $1}')
+process_id=$(ps -ax | grep 'rackup' | grep -v 'grep' | awk '{print $1}')
 
 # The following part carries out specific functions depending on arguments.
 case "$1" in
@@ -28,7 +28,7 @@ case "$1" in
     log_message "Starting web_server...";
     if [ -z "${process_id}" ]; then
         log_message "web_server script executing";
-        /bin/bash -c "cd /home/pi/pi-weather-pro/gamora/website/;make daemon";
+        /bin/bash -c "cd /home/pi/pi-weather-pro/groot-jr/website/;make daemon";
     else
         log_message "website is already running: ${process_id}";
     fi
@@ -40,7 +40,7 @@ case "$1" in
         log_message "web_server is not running";
     else
         log_message "Killing ${process_id}";
-        kill ${process_id}
+        sudo kill ${process_id}
     fi
     ;;
   *)
@@ -51,7 +51,5 @@ esac
 
 exit 0
 
-# Author: Henry Seurer <henry@gmail.com>
-
 DESC="web_server"
-DAEMON=cd /home/pi/pi-weather-pro/gamora/website/web_server.rb
+DAEMON=cd /home/pi/pi-weather-pro/groot-jr/website/web_server.rb

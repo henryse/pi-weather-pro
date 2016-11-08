@@ -1,10 +1,14 @@
 current_dir:=$(shell pwd)
-weather_data:=$(current_dir)/../website
+weather_data:=$(current_dir)/../website/public
+ip_address:=$(shell ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 version:
 	@echo [INFO] [version]
 	@echo [INFO]    Build Makefile Version 1.00
-	@echo
+	@echo [INFO] [settings]
+	@echo [INFO]    weather_data: $(weather_data)
+	@echo [INFO]    ip_address: $(ip_address)
+
 
 help: version
 	@printf "\e[1;34m[INFO] [information]\e[00m\n\n"
@@ -26,13 +30,13 @@ build: version
 	bundle
 
 install: build
-	sudo update-rc.d -f watcher remove
-	sudo cp watcher.sh /etc/init.d/watcher
-	sudo chmod 755 /etc/init.d/watcher
-	sudo update-rc.d watcher defaults
+	sudo update-rc.d -f collector remove
+	sudo cp collector.sh /etc/init.d/collector
+	sudo chmod 755 /etc/init.d/collector
+	sudo update-rc.d collector defaults
 
 run: version
-	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data)
+	ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data) &
+	/usr/local/bin/ruby weather_collector.rb --url="http://$(ip_address):8080" --sleep=900 --directory=$(weather_data) --daemonize=true

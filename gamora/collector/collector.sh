@@ -28,7 +28,7 @@ case "$1" in
     log_message "Starting weather_collector...";
     if [ -z "${process_id}" ]; then
         log_message "weather_collector script executing";
-        /bin/bash -c "cd /home/pi/pi-weather-pro/gamora/collector/;make daemon";
+        /bin/bash -c "cd /home/pi/pi-weather-pro/groot-jr/collector/;make daemon";
     else
         log_message "weather_collector is already running: ${process_id}";
     fi
@@ -40,7 +40,7 @@ case "$1" in
         log_message "weather_collector is not running";
     else
         log_message "Killing ${process_id}";
-        kill ${process_id}
+        sudo kill ${process_id}
     fi
     ;;
   *)
@@ -55,4 +55,4 @@ exit 0
 
 DESC="weather_collector"
 # TODO: We need to fill this in....
-DAEMON=/home/pi/pi-weather-pro/gamora/collector/weather_collector.rb
+DAEMON=/home/pi/pi-weather-pro/groot-jr/collector/weather_collector.rb

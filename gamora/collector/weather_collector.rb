@@ -14,7 +14,6 @@ class WeatherCollector
     @url = url
     @ignore = %w(ESP8266HeapSize FullDataString IndoorTemperature)
     @db_name = directory + '/weather'
-    create_database
   end
 
   def sql_execute(statement)
@@ -29,35 +28,48 @@ class WeatherCollector
     end
   end
 
-  def internal_create_database
-    weather_data = get_weather_data
+  def create_database(weather_data)
+    if File.exist?(@db_name)
+      @logger.info("Database '#{@db_name}' already exists, we don't need to create it")
+    else
+      @logger.info("Starting to create database: #{@db_name}")
 
-    # Create SQL Statement
-    #
-    create_values = Array.new
-    weather_data['variables'].each do |value|
-      unless @ignore.include?(value[0])
-        create_values.push(" #{value[0]} char(32)")
+      begin
+        create_values = Array.new
+        weather_data['variables'].each do |value|
+          unless @ignore.include?(value[0])
+            create_values.push(" #{value[0]} char(32)")
+          end
+        end
+
+        create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
+        sql_execute(create_table)
+        @logger.info("Created database: #{@db_name}")
+      rescue Exception => e
+        @logger.error("Unable to create database, will try again in a bit: #{e}")
+        return false
       end
     end
 
-    create_table = "CREATE TABLE if not exists weather(id INTEGER NOT NULL PRIMARY KEY DEFAULT ASC, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, #{create_values.join(', ')});"
-    sql_execute(create_table)
+    true
   end
 
-  def create_database
-    @logger.info("Starting to create database: #{@db_name}")
-
-    while true
-      begin
-        internal_create_database
-        break
-      rescue Exception => e
-        @logger.error("Unable to create dabase, will try again in a bit: #{e}")
+  def update_database(weather_data)
+    begin
+      columns = Array.new
+      values = Array.new
+      weather_data['variables'].each do |value|
+        unless @ignore.include?(value[0])
+          columns.push(value[0])
+          values.push("\"#{value[1].to_s}\"")
+        end
       end
-      sleep(120)
+
+      insert_row = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
+      sql_execute(insert_row)
+    rescue Exception => e
+      @logger.error("Unable to update database: #{e}")
     end
-    @logger.info("Created database: #{@db_name}")
   end
 
   def clean_data(input)
@@ -88,19 +100,9 @@ class WeatherCollector
     weather_data = get_weather_data
 
     unless weather_data.nil?
-      # Insert SQL Statement
-      #
-      columns = Array.new
-      values = Array.new
-      weather_data['variables'].each do |value|
-        unless @ignore.include?(value[0])
-          columns.push(value[0])
-          values.push("\"#{value[1].to_s}\"")
-        end
+      if create_database(weather_data)
+        update_database(weather_data)
       end
-
-      insert_sql = "insert into weather (#{columns.join(', ')}) VALUES(#{values.join(', ')})"
-      sql_execute(insert_sql)
     end
   end
 end
@@ -110,6 +112,7 @@ end
 options = OpenStruct.new
 options.sleep = 900
 options.directory = File.expand_path(File.dirname(__FILE__))
+options.daemon = false
 
 opt_parser = OptionParser.new do |opts|
   opts.banner = 'Usage: data_collector.rb [options]'
@@ -125,6 +128,10 @@ opt_parser = OptionParser.new do |opts|
   opts.on('--directory=DIRECTORY', String, 'Directory to write file to') do |directory|
     options.directory = directory
   end
+
+  opts.on('--daemonize=DAEMONIZE', String, 'Run as a daemon') do |daemon|
+    options.daemon = daemon.downcase == 'true'
+  end
 end
 
 opt_parser.parse!
@@ -137,6 +144,7 @@ if options.url.nil?
   puts 'ERROR: You need to pass at lest an URL of the Weather Pro endpoint'
   puts opt_parser.to_s
 else
+  Process.daemon if options.daemon
 
   weather_pro = WeatherCollector.new(options.url, options.directory)
 
