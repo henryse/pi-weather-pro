@@ -24,7 +24,6 @@ help: version
 
 build: version
 	bundle
-	sudo gem uninstall rack --version 2.0.1
 
 install: build
 	sudo update-rc.d -f website remove
