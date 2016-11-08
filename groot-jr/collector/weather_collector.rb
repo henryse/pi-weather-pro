@@ -21,7 +21,11 @@ class WeatherCollector
     @logger.info  "SQL Statement: #{statement}"
     begin
       db = SQLite3::Database.open @db_name
-      db.execute(statement)
+      if db.nil?
+        @logger.error  "Unable to open file #{@db_name} to execute #{statement}"
+      else
+        db.execute(statement)
+      end
     rescue SQLite3::Exception => e
       @logger.error  "SQL Exception: #{e} for statement #{statement}"
     ensure
