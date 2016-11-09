@@ -6,23 +6,6 @@ require 'sqlite3'
 require 'json'
 
 class WebServer  < Sinatra::Base
-  def sql_execute(statement)
-    @logger.info  "SQL Statement: #{statement}"
-
-    begin
-      puts "trying sql_execute: #{@db_name} for statement #{statement}"
-      db = SQLite3::Database.open @db_name
-      results = db.execute(statement)
-      puts "success sql_execute: #{@db_name} for statement #{statement}"
-    rescue SQLite3::Exception => e
-      puts "SQL Exception: #{e} for statement #{statement}"
-      @logger.error  "SQL Exception: #{e} for statement #{statement}"
-    ensure
-      db.close if db
-    end
-
-    results
-  end
 
   def initialize
     super(app)
@@ -36,6 +19,22 @@ class WebServer  < Sinatra::Base
   end
   get '/test' do
     erb :test
+  end
+
+  def sql_execute(statement)
+    @logger.info  "SQL Statement: #{statement}"
+    results = Array.new
+
+    begin
+      db = SQLite3::Database.open @db_name
+      results = db.execute(statement)
+    rescue SQLite3::Exception => e
+      @logger.error  "SQL Exception: #{e} for statement #{statement}"
+    ensure
+      db.close if db
+    end
+
+    results
   end
 
   def element_exist?(element)
