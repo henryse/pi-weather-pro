@@ -8,10 +8,11 @@ require 'json'
 class WebServer  < Sinatra::Base
   def sql_execute(statement)
     @logger.info  "SQL Statement: #{statement}"
+
     begin
       puts "trying sql_execute: #{@db_name} for statement #{statement}"
       db = SQLite3::Database.open @db_name
-      db.execute(statement)
+      results = db.execute(statement)
       puts "success sql_execute: #{@db_name} for statement #{statement}"
     rescue SQLite3::Exception => e
       puts "SQL Exception: #{e} for statement #{statement}"
@@ -19,6 +20,8 @@ class WebServer  < Sinatra::Base
     ensure
       db.close if db
     end
+
+    results
   end
 
   def initialize
