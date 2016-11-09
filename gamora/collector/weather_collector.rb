@@ -12,31 +12,43 @@ class WeatherCollector
     @logger.level = Logger::INFO
 
     @url = url
-    @ignore = %w(ESP8266HeapSize FullDataString IndoorTemperature)
+    @ignore = %w(ESP8266HeapSize FullDataString)
     @db_name = directory + '/weather'
   end
 
   def sql_execute(statement)
     @logger.info  "SQL Statement: #{statement}"
+    results = Array.new
+
     begin
       db = SQLite3::Database.open @db_name
-      db.execute(statement)
+      results = db.execute(statement)
     rescue SQLite3::Exception => e
       @logger.error  "SQL Exception: #{e} for statement #{statement}"
     ensure
       db.close if db
     end
+
+    results
+  end
+
+  def database_exist?
+    if File.exist?(@db_name)
+      return sql_execute("SELECT name FROM sqlite_master WHERE type='table' AND name='weather';").empty?
+    end
+
+    false
   end
 
   def create_database(weather_data)
-    if File.exist?(@db_name)
+    if database_exist?
       @logger.info("Database '#{@db_name}' already exists, we don't need to create it")
     else
       @logger.info("Starting to create database: #{@db_name}")
 
       begin
         create_values = Array.new
-        weather_data['variables'].each do |value|
+        weather_data.each do |value|
           unless @ignore.include?(value[0])
             create_values.push(" #{value[0]} char(32)")
           end
@@ -58,7 +70,7 @@ class WeatherCollector
     begin
       columns = Array.new
       values = Array.new
-      weather_data['variables'].each do |value|
+      weather_data.each do |value|
         unless @ignore.include?(value[0])
           columns.push(value[0])
           values.push("\"#{value[1].to_s}\"")
@@ -153,4 +165,3 @@ else
     sleep(options.sleep)
   end
 end
-

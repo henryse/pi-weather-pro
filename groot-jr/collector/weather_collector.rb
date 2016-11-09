@@ -165,4 +165,3 @@ else
     sleep(options.sleep)
   end
 end
-
