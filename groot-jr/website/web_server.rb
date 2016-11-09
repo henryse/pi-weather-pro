@@ -12,6 +12,7 @@ class WebServer  < Sinatra::Base
       db = SQLite3::Database.open @db_name
       db.execute(statement)
     rescue SQLite3::Exception => e
+      puts "SQL Exception: #{e} for statement #{statement}"
       @logger.error  "SQL Exception: #{e} for statement #{statement}"
     ensure
       db.close if db
