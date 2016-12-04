@@ -25,7 +25,7 @@ help: version
 build: version
 	bundle
 
-install: build
+install: version
 	sudo update-rc.d -f website remove
 	sudo cp website.sh /etc/init.d/website
 	sudo chmod 755 /etc/init.d/website
@@ -35,4 +35,4 @@ run: version
 	/bin/bash -c "rackup --host=0.0.0.0 --port=8080"
 
 daemon: version
-	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8090 --daemonize"
+	/bin/bash -c "/usr/local/bin/rackup --host=0.0.0.0 --port=8080 --daemonize"

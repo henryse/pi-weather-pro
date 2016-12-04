@@ -28,14 +28,14 @@ help: version
 build: version
 	bundle
 
-install: build
+install: version
 	sudo update-rc.d -f collector remove
 	sudo cp collector.sh /etc/init.d/collector
 	sudo chmod 755 /etc/init.d/collector
 	sudo update-rc.d collector defaults
 
 run: version
-	ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data)
+	ruby weather_collector.rb --url="http://192.168.0.100" --sleep=900 --directory=$(weather_data)
 
 daemon: version
-	/usr/local/bin/ruby weather_collector.rb --url="http://weather-pro" --sleep=900 --directory=$(weather_data) --daemonize=true
+	/usr/local/bin/ruby weather_collector.rb --url="http://192.168.0.100" --sleep=900 --directory=$(weather_data) --daemonize=true

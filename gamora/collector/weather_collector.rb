@@ -34,7 +34,8 @@ class WeatherCollector
 
   def database_exist?
     if File.exist?(@db_name)
-      return sql_execute("SELECT name FROM sqlite_master WHERE type='table' AND name='weather';").empty?
+      result = sql_execute("SELECT name FROM sqlite_master WHERE type='table' AND name='weather';")
+      return !result.empty?
     end
 
     false
@@ -48,7 +49,7 @@ class WeatherCollector
 
       begin
         create_values = Array.new
-        weather_data.each do |value|
+        weather_data['variables'].each do |value|
           unless @ignore.include?(value[0])
             create_values.push(" #{value[0]} char(32)")
           end
@@ -70,7 +71,7 @@ class WeatherCollector
     begin
       columns = Array.new
       values = Array.new
-      weather_data.each do |value|
+      weather_data['variables'].each do |value|
         unless @ignore.include?(value[0])
           columns.push(value[0])
           values.push("\"#{value[1].to_s}\"")
